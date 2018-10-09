@@ -23,6 +23,8 @@ interface RestClientInterface
 
     const DATE_TIME_ZONE = 'UTC';
 
+    const UPLOAD_API_URL = 'https://upload.allegro.pl';
+
     const REST_API_URL = 'https://api.allegro.pl';
 
     const OAUTH_URL = 'https://allegro.pl/auth/oauth';
