@@ -23,11 +23,14 @@ interface RestClientInterface
 
     const DATE_TIME_ZONE = 'UTC';
 
-    const UPLOAD_API_URL = 'https://upload.allegro.pl';
+    const UPLOAD_API_URL         = 'https://upload.allegro.pl';
+    const SANDBOX_UPLOAD_API_URL = 'https://upload.allegro.pl.allegrosandbox.pl';
 
-    const REST_API_URL = 'https://api.allegro.pl';
+    const REST_API_URL         = 'https://api.allegro.pl';
+    const SANDBOX_REST_API_URL = 'https://api.allegro.pl.allegrosandbox.pl';
 
-    const OAUTH_URL = 'https://allegro.pl/auth/oauth';
+    const OAUTH_URL         = 'https://allegro.pl/auth/oauth';
+    const SANDBOX_OAUTH_URL = 'https://allegro.pl.allegrosandbox.pl/auth/oauth/';
 
     public function getAuthService(): AuthServiceInterface;
 
