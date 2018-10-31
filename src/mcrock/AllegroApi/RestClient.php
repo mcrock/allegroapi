@@ -41,15 +41,21 @@ class RestClient implements RestClientInterface
      */
     private $lastHttpResponse;
 
-    public function __construct(CredentialsInterface $credentials)
+    public $isSandbox;
+
+    public function __construct(CredentialsInterface $credentials, $isSandbox = false)
     {
         $this->credentials = $credentials;
+        $this->isSandbox   = $isSandbox;
     }
 
     private function getHttpClient(): Client
     {
         if (null === $this->httpClient) {
-            $this->httpClient = new Client(['base_uri' => RestClientInterface::REST_API_URL]);
+
+            $baseUri = $this->isSandbox ? RestClientInterface::SANDBOX_REST_API_URL :RestClientInterface::REST_API_URL;
+
+            $this->httpClient = new Client(['base_uri' => $baseUri]);
         }
 
         return $this->httpClient;
@@ -58,7 +64,7 @@ class RestClient implements RestClientInterface
     public function getAuthService(): AuthServiceInterface
     {
         if (is_null($this->authService)) {
-            $this->authService = new AuthService($this->credentials, $this->getHttpClient());
+            $this->authService = new AuthService($this->credentials, $this->getHttpClient(), $this->isSandbox);
         }
 
         return $this->authService;

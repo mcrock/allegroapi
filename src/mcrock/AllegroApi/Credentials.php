@@ -31,7 +31,7 @@ class Credentials implements CredentialsInterface
      * @var string
      */
     private $soapApiKey;
-    //Testowy komentarz
+
     public function __construct(array $credentials)
     {
         foreach ($credentials as $field => $value) {

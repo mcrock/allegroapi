@@ -27,11 +27,14 @@ class AuthService implements AuthServiceInterface
      */
     private $httpClient;
 
+    public $isSandbox;
 
-    public function __construct(CredentialsInterface $credentials, Client $httpClient)
+
+    public function __construct(CredentialsInterface $credentials, Client $httpClient, $isSandbox)
     {
         $this->credentials = $credentials;
-        $this->httpClient = $httpClient;
+        $this->httpClient  = $httpClient;
+        $this->isSandbox   = $isSandbox;
     }
 
     public function getAuthUrl(): string
@@ -43,12 +46,16 @@ class AuthService implements AuthServiceInterface
             'redirect_uri' => $this->credentials->getRestRedirectUri(),
         ];
 
-        return RestClientInterface::OAUTH_URL.'/authorize?'.http_build_query($query);
+        $authUrl = $this->httpClient->isSandbox ? RestClientInterface::SANDBOX_OAUTH_URL : RestClientInterface::OAUTH_URL;
+
+        return $authUrl.'/authorize?'.http_build_query($query);
     }
 
     public function getNewToken(string $authCode): TokenInterface
     {
-        $response = $this->httpClient->post(RestClientInterface::OAUTH_URL.'/token', [
+        $authUrl = $this->isSandbox ? RestClientInterface::SANDBOX_OAUTH_URL : RestClientInterface::OAUTH_URL;
+
+        $response = $this->httpClient->post($authUrl.'/token', [
             'auth' => [
                 $this->credentials->getRestClientId(),
                 $this->credentials->getRestClientSecret(),
@@ -66,7 +73,9 @@ class AuthService implements AuthServiceInterface
 
     public function refreshToken(TokenInterface $token): TokenInterface
     {
-        $response = $this->httpClient->post(RestClientInterface::OAUTH_URL.'/token', [
+        $authUrl = $this->isSandbox ? RestClientInterface::SANDBOX_OAUTH_URL : RestClientInterface::OAUTH_URL;
+
+        $response = $this->httpClient->post($authUrl.'/token', [
             'auth' => [
                 $this->credentials->getRestClientId(),
                 $this->credentials->getRestClientSecret(),
